@@ -885,7 +885,7 @@ const u8 gFieldMoveBadgeRequirements[FIELD_MOVE_COUNT] =
 	[FIELD_MOVE_WATERFALL] = 0,
 	[FIELD_MOVE_ROCK_CLIMB] = 0,
 	[FIELD_MOVE_DEFOG] = 0,
-	[FIELD_MOVE_DIVE] = 0,
+	[FIELD_MOVE_DIVE] = 8,
 };
 
 #else //For Pokemon Unbound

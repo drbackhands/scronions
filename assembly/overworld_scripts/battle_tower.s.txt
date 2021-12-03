@@ -1,0 +1,927 @@
+.thumb
+.align 2
+
+.include "../xse_commands.s"
+.include "../xse_defines.s"
+
+.global EventScript_BattleTower_Host
+EventScript_BattleTower_Host:
+
+'---------------
+#org 0x900BA4
+faceplayer
+cmd8a 0x16 0x3A 0x40
+nop
+nop
+callasm 0x890A355
+msgbox 0x897C260 MSG_NORMAL '"Welcome to the Battle Tower!\pI am..."
+callasm 0x890B569
+compare LASTRESULT 0x0
+if 0x1 goto 0x8900BDA
+checkflag 0x150C
+if 0x1 goto 0x8900BDA
+msgbox 0x897F863 MSG_NORMAL '"Before you can battle, please\nspe..."
+end
+
+'---------------
+#org 0x900BDA
+preparemsg 0x897C2FC '"Would you like to take the Battle\..."
+waitmsg
+setvar 0x8006 0x0
+loadpointer 0x0 0x89806A5 '"Challenge"
+special 0x25
+setvar 0x8006 0x1
+loadpointer 0x0 0x89806C1 '"Battle Options"
+special 0x25
+setvar 0x8006 0x2
+loadpointer 0x0 0x89806AF '"Info"
+special 0x25
+setvar 0x8006 0x3
+loadpointer 0x0 0x89806D0 '"Exit"
+special 0x25
+multichoice 0x0 0x0 0x22 0x0
+compare LASTRESULT 0x0
+if 0x1 goto 0x8900C5B
+compare LASTRESULT 0x1
+if 0x1 goto 0x8900FC3
+compare LASTRESULT 0x2
+if 0x1 goto 0x8900E4E
+msgbox 0x897EF7E MSG_NORMAL '"We hope to see you again!"
+clearflag 0x23D
+clearflag 0x9F0
+setvar 0x5036 0x0
+setvar 0x4039 0x0
+goto 0x87405C3
+
+'---------------
+#org 0x900C5B
+setvar 0x4002 0x0
+special 0x8F
+setvar 0x4083 0x43
+compare 0x8004 0xA
+if 0x1 goto 0x890144F
+preparemsg 0x897C32E '"Which Battle Room would you like?\..."
+waitmsg
+setvar 0x8006 0x0
+loadpointer 0x0 0x89806D5 '"Single Battle"
+special 0x25
+setvar 0x8006 0x1
+loadpointer 0x0 0x89806E3 '"Double Battle"
+special 0x25
+setvar 0x8006 0x2
+loadpointer 0x0 0x8980710 '"Random Single Battle"
+special 0x25
+setvar 0x8006 0x3
+loadpointer 0x0 0x8980725 '"Random Double Battle"
+special 0x25
+setvar 0x8006 0x4
+loadpointer 0x0 0x841E0B9 '"Cancel"
+special 0x25
+multichoice 0x0 0x0 0x23 0x0
+compare LASTRESULT 0x4
+if 0x4 goto 0x8900BDA
+compare LASTRESULT 0x2
+if 0x0 goto 0x8900CE9
+addvar LASTRESULT 0x2
+callasm 0x890A411
+goto 0x8900D23
+
+'---------------
+#org 0x900FC3
+preparemsg 0x897EAB4 '"Which settings would you like to\n..."
+waitmsg
+setvar 0x8000 0x7
+setvar 0x8001 0x6
+setvar 0x8004 0x0
+special 0x158
+waitstate
+compare LASTRESULT 0x0
+if 0x1 goto 0x8901023
+compare LASTRESULT 0x1
+if 0x1 goto 0x8901063
+compare LASTRESULT 0x2
+if 0x1 goto 0x8901124
+compare LASTRESULT 0x3
+if 0x1 goto 0x890119A
+compare LASTRESULT 0x4
+if 0x1 goto 0x89011DD
+compare LASTRESULT 0x5
+if 0x1 goto 0x8901235
+goto 0x8900BDA
+
+'---------------
+#org 0x900E4E
+preparemsg 0x897C4A0 '"What would you like me to explain?"
+waitmsg
+setvar 0x8006 0x0
+loadpointer 0x0 0x898075C '"General Info"
+special 0x25
+setvar 0x8006 0x1
+loadpointer 0x0 0x8980769 '"Battle Settings"
+special 0x25
+setvar 0x8006 0x2
+loadpointer 0x0 0x8980786 '"Battle Tiers"
+special 0x25
+setvar 0x8006 0x3
+loadpointer 0x0 0x8980779 '"Preset Teams"
+special 0x25
+setvar 0x8006 0x4
+loadpointer 0x0 0x841E0B9 '"Cancel"
+special 0x25
+multichoice 0x0 0x0 0x23 0x0
+compare LASTRESULT 0x0
+if 0x1 goto 0x8900ED0
+compare LASTRESULT 0x1
+if 0x1 goto 0x8900EF8
+compare LASTRESULT 0x2
+if 0x1 goto 0x8900F17
+compare LASTRESULT 0x3
+if 0x1 goto 0x8900F05
+goto 0x8900BDA
+
+'---------------
+#org 0x7405C3
+closeonkeypress
+applymovement LASTTALKED 0x87C164E
+waitmovement 0x0
+end
+
+'---------------
+#org 0x90144F
+setvar 0x4002 0x0
+setvar 0x4083 0xD8
+preparemsg 0x897C362 '"Which Battle Room would you like?"
+waitmsg
+setvar 0x8006 0x0
+loadpointer 0x0 0x89806F1 '"Multi Battle"
+special 0x25
+setvar 0x8006 0x1
+loadpointer 0x0 0x89806FE '"Link Multi Battle"
+special 0x25
+setvar 0x8006 0x2
+loadpointer 0x0 0x898073A '"Random Multi Battle"
+special 0x25
+setvar 0x8006 0x3
+loadpointer 0x0 0x841E0B9 '"Cancel"
+special 0x25
+multichoice 0x0 0x0 0x22 0x0
+compare LASTRESULT 0x1
+if 0x1 goto 0x8901597
+compare LASTRESULT 0x3
+if 0x4 goto 0x8900BDA
+addvar LASTRESULT 0x2
+compare LASTRESULT 0x4
+if 0x1 goto 0x89015A4
+setflag 0x9F0
+callasm 0x890A411
+special 0x27
+call 0x8900DC4
+compare LASTRESULT 0x0
+if 0x1 goto 0x8900BDA
+msgbox 0x897C3EF MSG_NORMAL '"Please select the Pokémon you wish..."
+callasm 0x890A581
+special 0xF5
+waitstate
+compare LASTRESULT 0x0
+if 0x1 goto 0x8900C3E
+special 0x28
+setvar 0x5035 0x0
+setvar 0x5036 0x3
+special 0x5D
+waitstate
+compare LASTRESULT 0x0
+if 0x1 goto 0x8900C3E
+callasm 0x890AB19
+checkflag 0x1505
+if 0x1 call 0x8900DC0
+getplayerpos 0x8004 0x8005
+subvar 0x8005 0x4
+special 0x27
+call 0x8900E3A
+special 0x73
+msgbox 0x897C445 MSG_NORMAL '"I will now show you to the\nBattle..."
+applymovement LASTTALKED 0x8900E4B
+applymovement MOVE_PLAYER 0x8900E4B
+waitmovement 0x0
+setdooropened 0x8004 0x8005
+doorchange
+pause 0x5
+applymovement LASTTALKED 0x8900E4C
+applymovement MOVE_PLAYER 0x8900E4C
+waitmovement 0x0
+hidesprite LASTTALKED
+movesprite2 LASTTALKED 0xFF 0xFF
+applymovement MOVE_PLAYER 0x8900E4C
+waitmovement 0x0
+special 0x113
+hidesprite 0xFF
+setdoorclosed 0x8004 0x8005
+doorchange
+warpmuted 0x2 0xB 0x0 0x0 0x0
+pause 0x40
+end
+
+'---------------
+#org 0x900CE9
+setflag 0x9F0
+callasm 0x890A411
+special 0x27
+call 0x8900DC4
+compare LASTRESULT 0x0
+if 0x1 goto 0x8900BDA
+msgbox 0x897C3EF MSG_NORMAL '"Please select the Pokémon you wish..."
+callasm 0x890A581
+special 0xF5
+waitstate
+compare LASTRESULT 0x0
+if 0x1 goto 0x8900C3E
+special 0x28
+setvar 0x5036 0x1
+setvar 0x5035 0x0
+special 0x5D
+waitstate
+compare LASTRESULT 0x0
+if 0x1 goto 0x8900C3E
+cmdc3 0x1E
+callasm 0x890AB19
+checkflag 0x1505
+if 0x1 call 0x8900DC0
+getplayerpos 0x8004 0x8005
+subvar 0x8005 0x4
+special 0x27
+call 0x8900E3A
+special 0x73
+msgbox 0x897C41D MSG_NORMAL '"I will now show you to the\nBattle..."
+applymovement LASTTALKED 0x8900E4B
+applymovement MOVE_PLAYER 0x8900E4B
+waitmovement 0x0
+setdooropened 0x8004 0x8005
+doorchange
+pause 0x5
+applymovement LASTTALKED 0x8900E4C
+applymovement MOVE_PLAYER 0x8900E4C
+waitmovement 0x0
+hidesprite LASTTALKED
+movesprite2 LASTTALKED 0xFF 0xFF
+applymovement MOVE_PLAYER 0x8900E4C
+waitmovement 0x0
+special 0x113
+hidesprite 0xFF
+setdoorclosed 0x8004 0x8005
+doorchange
+warpmuted 0x2 0xB 0x0 0x0 0x0
+pause 0x40
+end
+
+'---------------
+#org 0x900D23
+setvar 0x5036 0x1
+setvar 0x5035 0x0
+special 0x5D
+waitstate
+compare LASTRESULT 0x0
+if 0x1 goto 0x8900C3E
+cmdc3 0x1E
+callasm 0x890AB19
+checkflag 0x1505
+if 0x1 call 0x8900DC0
+getplayerpos 0x8004 0x8005
+subvar 0x8005 0x4
+special 0x27
+call 0x8900E3A
+special 0x73
+msgbox 0x897C41D MSG_NORMAL '"I will now show you to the\nBattle..."
+applymovement LASTTALKED 0x8900E4B
+applymovement MOVE_PLAYER 0x8900E4B
+waitmovement 0x0
+setdooropened 0x8004 0x8005
+doorchange
+pause 0x5
+applymovement LASTTALKED 0x8900E4C
+applymovement MOVE_PLAYER 0x8900E4C
+waitmovement 0x0
+hidesprite LASTTALKED
+movesprite2 LASTTALKED 0xFF 0xFF
+applymovement MOVE_PLAYER 0x8900E4C
+waitmovement 0x0
+special 0x113
+hidesprite 0xFF
+setdoorclosed 0x8004 0x8005
+doorchange
+warpmuted 0x2 0xB 0x0 0x0 0x0
+pause 0x40
+end
+
+'---------------
+#org 0x901023
+callasm 0x890A911
+preparemsg 0x897EADD '"Please choose the tier you wish to..."
+waitmsg
+setvar 0x8000 0x6
+setvar 0x8001 0x6
+setvar 0x8004 0x0
+special 0x158
+waitstate
+compare LASTRESULT 0x8
+if 0x4 goto 0x8900FC3
+callasm 0x890A989
+callasm 0x890A911
+msgbox 0x897EB26 MSG_NORMAL '"The battle tier has been set to:\n..."
+goto 0x8900FC3
+
+'---------------
+#org 0x901063
+call 0x8901275
+compare 0x50D7 0x4
+if 0x1 goto 0x89010FD
+compare 0x50D7 0x6
+if 0x1 goto 0x890110A
+compare 0x50D7 0x10
+if 0x1 goto 0x8901117
+buffernumber 0x0 0x50D6
+preparemsg 0x897EB4D '"Please choose the challenge level\..."
+waitmsg
+setvar 0x8006 0x0
+loadpointer 0x0 0x898095E '"Level 50"
+special 0x25
+setvar 0x8006 0x1
+loadpointer 0x0 0x8980967 '"Level 100"
+special 0x25
+setvar 0x8006 0x2
+loadpointer 0x0 0x841E0B9 '"Cancel"
+special 0x25
+multichoice 0x0 0x0 0x21 0x0
+compare LASTRESULT 0x0
+if 0x1 goto 0x89010DD
+compare LASTRESULT 0x1
+if 0x1 goto 0x89010E7
+goto 0x8900FC3
+
+'---------------
+#org 0x901124
+callasm 0x890AB91
+preparemsg 0x897ECA8 '"Please choose the number of\nPokém..."
+waitmsg
+setvar 0x8006 0x0
+loadpointer 0x0 0x8980971 '"[small]Singles: 3v3, Doubles: 4v4"
+special 0x25
+setvar 0x8006 0x1
+loadpointer 0x0 0x898098F '"[small]6v6"
+special 0x25
+setvar 0x8006 0x2
+loadpointer 0x0 0x841E0B9 '"Cancel"
+special 0x25
+multichoice 0x0 0x0 0x21 0x0
+compare LASTRESULT 0x0
+if 0x1 goto 0x8901179
+compare LASTRESULT 0x1
+if 0x1 goto 0x8901183
+goto 0x8900FC3
+
+'---------------
+#org 0x90119A
+call 0x8901275
+callasm 0x890ABE1
+msgbox 0x897ED27 MSG_YESNO '"Would you like to turn [green_fr][..."
+compare LASTRESULT 0x0
+if 0x1 goto 0x8900FC3
+checkflag 0x1505
+if 0x1 goto 0x89011C8
+setflag 0x1505
+goto 0x89011CB
+
+'---------------
+#org 0x9011DD
+callasm 0x890A9C5
+preparemsg 0x897ED87 '"Please choose the music you wish\n..."
+waitmsg
+setvar 0x8000 0x4
+setvar 0x8001 0x6
+setvar 0x8004 0x0
+special 0x158
+waitstate
+callasm 0x890AA15
+compare LASTRESULT 0xFFFF
+if 0x1 goto 0x8900FC3
+compare LASTRESULT 0xFFFE
+if 0x1 goto 0x8901228
+callasm 0x890A9C5
+msgbox 0x897EE2A MSG_NORMAL '"The battle music has been set to:\..."
+goto 0x8900FC3
+
+'---------------
+#org 0x901235
+callasm 0x890AA55
+preparemsg 0x897EE52 '"Please choose the background to\na..."
+waitmsg
+setvar 0x8000 0x5
+setvar 0x8001 0x6
+setvar 0x8004 0x0
+special 0x158
+waitstate
+callasm 0x890AAE1
+compare LASTRESULT 0xFFFF
+if 0x1 goto 0x8900FC3
+callasm 0x890AA55
+msgbox 0x897EF2E MSG_NORMAL '"The battle BG has been set to:\n[g..."
+goto 0x8900FC3
+
+'---------------
+#org 0x900ED0
+special 0x8F
+compare 0x8004 0xA
+if 0x1 goto 0x8900EEB
+msgbox 0x897C4C3 MSG_NORMAL '"The Battle Tower is a facility for..."
+goto 0x8900BDA
+
+'---------------
+#org 0x900EF8
+msgbox 0x897CBCF MSG_NORMAL '"For your battles, you may customiz..."
+goto 0x8900BDA
+
+'---------------
+#org 0x900F17
+msgbox 0x897CD36 MSG_NORMAL '"Battles can be fought in a variety..."
+call 0x8901275
+preparemsg 0x897CDB3 '"Which tier would you like to\nknow..."
+waitmsg
+setvar 0x8000 0x6
+setvar 0x8001 0x6
+setvar 0x8004 0x0
+special 0x158
+waitstate
+compare LASTRESULT 0x5
+if 0x1 goto 0x8900F5F
+compare LASTRESULT 0x8
+if 0x4 goto 0x8900BDA
+callasm 0x890A9A9
+callstd 0x6
+goto 0x8900F1F
+
+'---------------
+#org 0x900F05
+callasm 0x890A8ED
+msgbox 0x897CC74 MSG_NORMAL '"If you have Pokemon stored in box\..."
+goto 0x8900BDA
+
+'---------------
+#org 0x901597
+msgbox 0x897C46E MSG_NORMAL '"I'm sorry, this feature is\nunavai..."
+goto 0x890144F
+
+'---------------
+#org 0x9015A4
+setvar LASTRESULT 0x6
+callasm 0x890A411
+setvar 0x8000 0xFF
+special2 0x4082 0x6D
+setvar 0x5036 0x2
+goto 0x8900D28
+
+'---------------
+#org 0x900DC4
+setvar 0x4002 0x0
+callasm 0x890A669
+compare LASTRESULT 0x0
+if 0x1 goto 0x8900E17
+preparemsg 0x897C384 '"Would you like to use Pokémon from..."
+waitmsg
+setvar 0x8000 0x1B
+setvar 0x8001 0x6
+setvar 0x8004 0x0
+special 0x158
+waitstate
+compare LASTRESULT 0x6
+if 0x4 goto 0x8900E1D
+copyvar 0x4002 LASTRESULT
+callasm 0x890A705
+compare LASTRESULT 0x0
+if 0x1 goto 0x8900E28
+call 0x8900E3A
+setvar LASTRESULT 0x1
+return
+
+'---------------
+#org 0x900C3E
+msgbox 0x897EF7E MSG_NORMAL '"We hope to see you again!"
+clearflag 0x23D
+clearflag 0x9F0
+setvar 0x5036 0x0
+setvar 0x4039 0x0
+goto 0x87405C3
+
+'---------------
+#org 0x900DC0
+setflag 0x23D
+return
+
+'---------------
+#org 0x900E3A
+compare 0x4002 0x0
+if 0x1 goto 0x8900E4A
+callasm 0x890A76D
+return
+
+'---------------
+#org 0x901275
+special 0x8F
+compare 0x8004 0xA
+if 0x1 call 0x8901291
+if 0x5 call 0x890128A
+return
+
+'---------------
+#org 0x9010FD
+msgbox 0x897EBE0 MSG_NORMAL '"[green_fr]Little Cup[game] tiers m..."
+goto 0x8900FC3
+
+'---------------
+#org 0x90110A
+msgbox 0x897EC1E MSG_NORMAL '"The [green_fr]Monotype[game] tier ..."
+goto 0x8900FC3
+
+'---------------
+#org 0x901117
+msgbox 0x897EC5F MSG_NORMAL '"The [green_fr]Dynamax Standard[gam..."
+goto 0x8900FC3
+
+'---------------
+#org 0x9010DD
+setvar 0x50D6 0x32
+goto 0x89010EC
+
+'---------------
+#org 0x9010E7
+setvar 0x50D6 0x64
+buffernumber 0x0 0x50D6
+msgbox 0x897EBB4 MSG_NORMAL '"The challenge level was set to:\n[..."
+goto 0x8900FC3
+
+'---------------
+#org 0x901179
+setvar 0x50D5 0x1
+goto 0x8901188
+
+'---------------
+#org 0x901183
+setvar 0x50D5 0x6
+callasm 0x890AB91
+msgbox 0x897ED06 MSG_NORMAL '"The party size was set to:\n[green..."
+goto 0x8900FC3
+
+'---------------
+#org 0x9011C8
+clearflag 0x1505
+callasm 0x890AC35
+msgbox 0x897ED5D MSG_NORMAL '"Inverse Battles have been turned\n..."
+goto 0x8900FC3
+
+'---------------
+#org 0x9011CB
+callasm 0x890AC35
+msgbox 0x897ED5D MSG_NORMAL '"Inverse Battles have been turned\n..."
+goto 0x8900FC3
+
+'---------------
+#org 0x901228
+msgbox 0x897EDE7 MSG_NORMAL '"I'm sorry, but unfortunately that\..."
+goto 0x89011DD
+
+'---------------
+#org 0x900EEB
+msgbox 0x897C7BC MSG_NORMAL '"The Battle Tower is a facility for..."
+goto 0x8900BDA
+
+'---------------
+#org 0x900F5F
+setvar 0x8006 0x0
+loadpointer 0x0 0x8980858 '"Middle Cup"
+special 0x25
+setvar 0x8006 0x1
+loadpointer 0x0 0x8980863 '"GS Cup"
+special 0x25
+setvar 0x8006 0x2
+loadpointer 0x0 0x841E0B9 '"Cancel"
+special 0x25
+multichoice 0x0 0x0 0x21 0x0
+compare LASTRESULT 0x0
+if 0x1 goto 0x8900FA9
+compare LASTRESULT 0x1
+if 0x1 goto 0x8900FB6
+goto 0x8900F1F
+
+'---------------
+#org 0x900F1F
+call 0x8901275
+preparemsg 0x897CDB3 '"Which tier would you like to\nknow..."
+waitmsg
+setvar 0x8000 0x6
+setvar 0x8001 0x6
+setvar 0x8004 0x0
+special 0x158
+waitstate
+compare LASTRESULT 0x5
+if 0x1 goto 0x8900F5F
+compare LASTRESULT 0x8
+if 0x4 goto 0x8900BDA
+callasm 0x890A9A9
+callstd 0x6
+goto 0x8900F1F
+
+'---------------
+#org 0x900D28
+setvar 0x5035 0x0
+special 0x5D
+waitstate
+compare LASTRESULT 0x0
+if 0x1 goto 0x8900C3E
+cmdc3 0x1E
+callasm 0x890AB19
+checkflag 0x1505
+if 0x1 call 0x8900DC0
+getplayerpos 0x8004 0x8005
+subvar 0x8005 0x4
+special 0x27
+call 0x8900E3A
+special 0x73
+msgbox 0x897C41D MSG_NORMAL '"I will now show you to the\nBattle..."
+applymovement LASTTALKED 0x8900E4B
+applymovement MOVE_PLAYER 0x8900E4B
+waitmovement 0x0
+setdooropened 0x8004 0x8005
+doorchange
+pause 0x5
+applymovement LASTTALKED 0x8900E4C
+applymovement MOVE_PLAYER 0x8900E4C
+waitmovement 0x0
+hidesprite LASTTALKED
+movesprite2 LASTTALKED 0xFF 0xFF
+applymovement MOVE_PLAYER 0x8900E4C
+waitmovement 0x0
+special 0x113
+hidesprite 0xFF
+setdoorclosed 0x8004 0x8005
+doorchange
+warpmuted 0x2 0xB 0x0 0x0 0x0
+pause 0x40
+end
+
+'---------------
+#org 0x900E17
+setvar LASTRESULT 0x1
+return
+
+'---------------
+#org 0x900E1D
+setvar 0x4002 0x0
+setvar LASTRESULT 0x0
+return
+
+'---------------
+#org 0x900E28
+setvar 0x4002 0x0
+msgbox 0x897C3C5 MSG_NORMAL '"There are no Pokémon on that\npres..."
+goto 0x8900DC4
+
+'---------------
+#org 0x900E4A
+return
+
+'---------------
+#org 0x901291
+bufferstring 0x5 0x8984747 '"[red_fr]"
+return
+
+'---------------
+#org 0x90128A
+bufferstring 0x5 0x8984743 '"[blue_fr]"
+return
+
+'---------------
+#org 0x9010EC
+buffernumber 0x0 0x50D6
+msgbox 0x897EBB4 MSG_NORMAL '"The challenge level was set to:\n[..."
+goto 0x8900FC3
+
+'---------------
+#org 0x901188
+callasm 0x890AB91
+msgbox 0x897ED06 MSG_NORMAL '"The party size was set to:\n[green..."
+goto 0x8900FC3
+
+'---------------
+#org 0x900FA9
+msgbox 0x897D27A MSG_NORMAL '"In Middle Cup format, only Pokemon..."
+goto 0x8900F1F
+
+'---------------
+#org 0x900FB6
+msgbox 0x897D415 MSG_NORMAL '"In GS Cup format, up to two\nrestr..."
+goto 0x8900F1F
+
+
+'---------
+' Strings
+'---------
+#org 0x97C260
+= Welcome to the Battle Tower!\pI am your guide to the Single\nand Double Battle Rooms.
+
+#org 0x97F863
+= Before you can battle, please\nspeak to the woman on your right.
+
+#org 0x97C2FC
+= Would you like to take the Battle\nRoom challenge?
+
+#org 0x9806A5
+= Challenge
+
+#org 0x9806C1
+= Battle Options
+
+#org 0x9806AF
+= Info
+
+#org 0x9806D0
+= Exit
+
+#org 0x97EF7E
+= We hope to see you again!
+
+#org 0x97C32E
+= Which Battle Room would you like?\nSingle or Double?
+
+#org 0x9806D5
+= Single Battle
+
+#org 0x9806E3
+= Double Battle
+
+#org 0x980710
+= Random Single Battle
+
+#org 0x980725
+= Random Double Battle
+
+#org 0x41E0B9
+= Cancel
+
+#org 0x97EAB4
+= Which settings would you like to\nchange?
+
+#org 0x97C4A0
+= What would you like me to explain?
+
+#org 0x98075C
+= General Info
+
+#org 0x980769
+= Battle Settings
+
+#org 0x980786
+= Battle Tiers
+
+#org 0x980779
+= Preset Teams
+
+#org 0x97C362
+= Which Battle Room would you like?
+
+#org 0x9806F1
+= Multi Battle
+
+#org 0x9806FE
+= Link Multi Battle
+
+#org 0x98073A
+= Random Multi Battle
+
+#org 0x97C3EF
+= Please select the Pokémon you wish\nto enter. 
+
+#org 0x97C445
+= I will now show you to the\nBattle Salon.
+
+#org 0x97C41D
+= I will now show you to the\nBattle Room.
+
+#org 0x97EADD
+= Please choose the tier you wish to\nbattle in.\pThe current tier is:\n[green_fr][buffer1]
+
+#org 0x97EB26
+= The battle tier has been set to:\n[green_fr][buffer1]
+
+#org 0x97EB4D
+= Please choose the challenge level\nyou wish to battle with.\pThe current challenge level is:\n[green_fr]Level [buffer1]
+
+#org 0x98095E
+= Level 50
+
+#org 0x980967
+= Level 100
+
+#org 0x97ECA8
+= Please choose the number of\nPokémon you wish to battle with.\pThe current party size is:\n[green_fr][buffer1]
+
+#org 0x980971
+= [small]Singles: 3v3, Doubles: 4v4
+
+#org 0x98098F
+= [small]6v6
+
+#org 0x97ED27
+= Would you like to turn [green_fr][buffer1][blue_fr]\n[green_fr]Inverse Battles[game]?
+
+#org 0x97ED87
+= Please choose the music you wish\nto listen to while battling.\pThe current song choice is:\n[green_fr][buffer1]
+
+#org 0x97EE2A
+= The battle music has been set to:\n[green_fr][buffer1]
+
+#org 0x97EE52
+= Please choose the background to\nappear in battles.\pNote that this change is purely\naesthetic and all battle mechanics\lwill function as if the battle was\lon regular indoor terrain.\pThe current background choice is:\n[green_fr][buffer1]
+
+#org 0x97EF2E
+= The battle BG has been set to:\n[green_fr][buffer1]
+
+#org 0x97C4C3
+= The Battle Tower is a facility for\nSingle, Double, and Multi Battle\lchallenges.\pOnce begun, your challenge lasts\nuntil you defeat the Tower Tycoon,\lor you choose to rest.\pIn Single Battle format, you have a\nchoice of entering with three or\lsix Pokémon.\pIn Double Battle format, you have a\nchoice of entering with four or\lsix Pokémon.\pThe battles are held in Battle\nRooms of which there are many in\lthe tower.\pIn each of the Battle Rooms,\nTrainers await your challenge.\pFor every Trainer you defeat, you\nwill earn [green_fr]Battle Points[blue_fr] ([green_fr]BP[blue_fr]).\pIf you want to interrupt your\nchallenge, your progress will be\lrecorded for when you wish to\lcontinue.\pIf at any point you leave without\nsaving, you will be disqualified\lfrom your challenge.\pPlease be aware of that!
+
+#org 0x97CBCF
+= For your battles, you may customize\nthe following settings:\p-Battle Tier\n-Pokémon Level\l-Number of Pokémon Per Team\l-Inverse Battle\l-Battle Music\l-Battle Background
+
+#org 0x97CD36
+= Battles can be fought in a variety\nof different tiers.\pEach tier has its own ruleset which\nprovide a unique way of battling.
+
+#org 0x97CDB3
+= Which tier would you like to\nknow about?
+
+#org 0x97CC74
+= If you have Pokemon stored in box\n["][buffer1]", they may be used\lin place of your party Pokémon.\pEach row in the box is treated as\nits own team.\pAs such, this allows for up to\n5 different preset teams.
+
+#org 0x97C46E
+= I'm sorry, this feature is\nunavailable right now.
+
+#org 0x97C384
+= Would you like to use Pokémon from\na preset team, or your party?
+
+#org 0x97EBE0
+= [green_fr]Little Cup[game] tiers may only be\nbattled in at [green_fr]Level 5[game].
+
+#org 0x97EC1E
+= The [green_fr]Monotype[game] tier may only be\nbattled in at [green_fr]Level 100[game].
+
+#org 0x97EC5F
+= The [green_fr]Dynamax Standard[game] tier may only\nbe battled in at [green_fr]Level 100[game].
+
+#org 0x97EBB4
+= The challenge level was set to:\n[green_fr]Level [buffer1]
+
+#org 0x97ED06
+= The party size was set to:\n[green_fr][buffer1]
+
+#org 0x97ED5D
+= Inverse Battles have been turned\n[green_fr][buffer1][game].
+
+#org 0x97EDE7
+= I'm sorry, but unfortunately that\nsong is not currently available.
+
+#org 0x97C7BC
+= The Battle Tower is a facility for\nSingle, Double, and Multi Battle\lchallenges.\pOnce begun, your challenge lasts\nuntil you defeat the Tower Tycoon,\lor you choose to rest.\pThe Battle Tower's Multi Battle\nRooms are for Multi Battles with a\lpartner.\pTo enter, join another Trainer\nand compete with two or three\lPokémon each.\pInside the tower is a room named\nthe Battle Salon where you can\lmeet other Trainers.\pThere, you can find a Trainer to\nact as your partner in the Multi\lBattles.\pYou can also partner up with a\nfriend using a Link Cable.\pOnce you have partnered up, you\nwill be shown to a battle room.\pIn the Multi Battle Room, tag\nteams await your challenge.\pIf you manage to defeat each team,\nyou will earn [green_fr]Battle Points[red_fr] ([green_fr]BP[red_fr]).\pIf you want to interrupt your\nchallenge, your progress will be\lrecorded for when you wish to\lcontinue.\pIf at any point you leave without\nsaving, you will be disqualified\lfrom your challenge.\pAlso, if you are in a tag team\nwith a friend, you may not\linterrup
+
+#org 0x980858
+= Middle Cup
+
+#org 0x980863
+= GS Cup
+
+#org 0x97C3C5
+= There are no Pokémon on that\npreset team.
+
+#org 0x984747
+= [red_fr]
+
+#org 0x984743
+= [blue_fr]
+
+#org 0x97D27A
+= In Middle Cup format, only Pokemon\nthat have evolved once and can\lstill evolve again may be used.\pPokémon with the abilities\nProtean and Contrary, as well as\lPokémon holding the Light Ball\lmay not partcipate.\pDuplicate species or items may\nnot be used.\pAdditionally, the following Pokemon\nare not allowed to participate:\pKadabra, Chansey, and Combusken.\pThis tier is only available in\nthe Single Battle format.
+
+#org 0x97D415
+= In GS Cup format, up to two\nrestricted Pokémon can be used per\lteam in Double battles.\pIn Multi Battles, only one\nrestricted Pokémon may be used\lper Trainer.\pThese Pokémon include: Mewtwo,\nLugia, Ho-Oh, Groudon, Kyogre,\lRayquaza, Dialga, Palkia, Giratina,\lReshiram, Zekrom, Kyurem, Xerneas,\lYveltal, Zygarde, Solgaleo, Lunala,\land Necrozma.\pAdditionally, duplicate species or\nitems may not be used.\pThis tier is only available in\nDouble or Multi battle formats.
+
+
+'-----------
+' Movements
+'-----------
+#org 0x7C164E
+#raw 0x5A 'mov5A
+#raw 0xFE 'End of Movements
+
+#org 0x900E4B
+#raw 0x11 'Step Up (Normal)
+#raw 0x11 'Step Up (Normal)
+#raw 0xFE 'End of Movements
+
+#org 0x900E4C
+#raw 0x11 'Step Up (Normal)
+#raw 0xFE 'End of Movements
